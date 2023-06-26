@@ -19,6 +19,7 @@ const StartScreen = ({ navigation }) => {
   };
   return (
     <ImageBackground source={image} style={styles.image} resizeMode='cover'>
+      <Text style={styles.title}>Chat App</Text>
       <View style={styles.container}>
         <TextInput
           value={name}
@@ -71,11 +72,20 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     borderRadius: 5,
+    marginBottom: 50,
   },
   image: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  title: {
+    flex: 0.5,
+    fontSize: 45,
+    color: '#fff',
+    width: '100%',
+    textAlign: 'center',
+    fontWeight: '700',
   },
   textInput: {
     width: '88%',
