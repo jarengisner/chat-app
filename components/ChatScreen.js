@@ -6,13 +6,29 @@ import {
   Platform,
 } from 'react-native';
 import { useEffect, useState } from 'react';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 
 const ChatScreen = ({ route, navigation }) => {
   //params passed from start screen
   const { name, bgColor } = route.params;
   //State
   const [messages, setMessages] = useState([]);
+
+  const renderBubble = (props) => {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: '#000',
+          },
+          left: {
+            backgroundColor: '#FFF',
+          },
+        }}
+      ></Bubble>
+    );
+  };
 
   useEffect(() => {
     navigation.setOptions({ title: name });
@@ -51,6 +67,8 @@ const ChatScreen = ({ route, navigation }) => {
       <GiftedChat
         messages={messages}
         onSend={(messages) => onSend(messages)}
+        textInputStyle={{ height: 50, marginBottom: 10 }}
+        renderBubble={renderBubble}
         user={{
           _id: 1,
         }}
