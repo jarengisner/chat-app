@@ -7,13 +7,22 @@ import {
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
+  DocumentSnapshot,
+} from 'firebase/firestore';
 
-const ChatScreen = ({ route, navigation }) => {
+const ChatScreen = ({ route, navigation, db }) => {
   //params passed from start screen
-  const { name, bgColor } = route.params;
+  const { name, bgColor, userID } = route.params;
   //State
   const [messages, setMessages] = useState([]);
-
+  //styles our chat bubbles//
   const renderBubble = (props) => {
     return (
       <Bubble
@@ -35,31 +44,32 @@ const ChatScreen = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-      {
-        _id: 2,
-        text: 'This is a system message',
-        createdAt: new Date(),
-        system: true,
-      },
-    ]);
+    //defines our query//
+    const q = query(collection(db, 'messages'), orderBy('createdAt', 'desc'));
+    //defines our snapshot function to fetch new messages in real-time//
+    const creatingNewMessages = onSnapshot(q, (DocumentSnapshot) => {
+      let messagesArr = [];
+      DocumentSnapshot.forEach((document) => {
+        //creates a new message object for each new message fetched from the messages db//
+        messagesArr.push({
+          id: document.id,
+          ...document.data(),
+          createdAt: new Date(doc.data().createdAt.toMillis()),
+        });
+      });
+      //constantly updates our messages with the new message objects created//
+      setMessages(messagesArr);
+    });
+
+    return () => {
+      //unsubscribes from the connection if nothing is happening//
+      if (creatingNewMessages) creatingNewMessages();
+    };
   }, []);
 
   //custom function to adjust what happens when messages are sent//
-  const onSend = (newMessages) => {
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, newMessages)
-    );
+  const onSend = (messagesArr) => {
+    addDoc(collection(db, 'messages'), messagesArr[0]);
   };
 
   return (
@@ -70,7 +80,8 @@ const ChatScreen = ({ route, navigation }) => {
         textInputStyle={{ height: 50, marginBottom: 10 }}
         renderBubble={renderBubble}
         user={{
-          _id: 1,
+          _id: userID,
+          name: name,
         }}
       />
       {Platform.OS === 'android' ? (
