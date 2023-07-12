@@ -54,7 +54,7 @@ const ChatScreen = ({ route, navigation, db }) => {
         messagesArr.push({
           id: document.id,
           ...document.data(),
-          createdAt: new Date(doc.data().createdAt.toMillis()),
+          createdAt: new Date(document.data().createdAt.toMillis()),
         });
       });
       //constantly updates our messages with the new message objects created//

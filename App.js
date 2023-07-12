@@ -33,10 +33,8 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Screen1'>
         <Stack.Screen name='Start' component={StartScreen} />
-        <Stack.Screen name='ChatScreen' component={ChatScreen}>
-          {(props) => {
-            <ChatScreen db={db} {...props} />;
-          }}
+        <Stack.Screen name='ChatScreen'>
+          {(props) => <ChatScreen db={db} {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
