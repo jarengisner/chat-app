@@ -15,39 +15,39 @@ import {
 import { useNetInfo } from '@react-native-community/netinfo';
 import { useEffect } from 'react';
 
-// app's Firebase configuration
-const firebaseConfig = {
-  apiKey: 'AIzaSyCitnuS0IlCgzCwppHVWZeU2NGWffXRZyY',
-  authDomain: 'chat-app-60526.firebaseapp.com',
-  projectId: 'chat-app-60526',
-  storageBucket: 'chat-app-60526.appspot.com',
-  messagingSenderId: '850486310116',
-  appId: '1:850486310116:web:c4a3580e9171d3a5cea8f1',
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-//initializes our db//
-const db = getFirestore(app);
-
-//creates the navigator
-const Stack = createNativeStackNavigator();
-
-//creates connection status variable
-const connect = useNetInfo();
-
-//useEffect disabling the app from attempting to connect to db if user does not have internet//
-useEffect(() => {
-  if (connect.isConnected === false) {
-    Alert.alert('Internet Connection Lost');
-    disableNetwork(db);
-  } else if (connect.isConnected === true) {
-    enableNetwork();
-  }
-}, [connect.isConnected]);
-
 export default function App() {
+  // app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: 'AIzaSyCitnuS0IlCgzCwppHVWZeU2NGWffXRZyY',
+    authDomain: 'chat-app-60526.firebaseapp.com',
+    projectId: 'chat-app-60526',
+    storageBucket: 'chat-app-60526.appspot.com',
+    messagingSenderId: '850486310116',
+    appId: '1:850486310116:web:c4a3580e9171d3a5cea8f1',
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+  //initializes our db//
+  const db = getFirestore(app);
+
+  //creates the navigator
+  const Stack = createNativeStackNavigator();
+
+  //creates connection status variable
+  const connect = useNetInfo();
+
+  //useEffect disabling the app from attempting to connect to db if user does not have internet//
+  useEffect(() => {
+    if (connect.isConnected === false) {
+      Alert.alert('Internet Connection Lost');
+      disableNetwork(db);
+    } else if (connect.isConnected === true) {
+      enableNetwork();
+    }
+  }, [connect.isConnected]);
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Screen1'>
