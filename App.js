@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 //components
 import StartScreen from './components/StartScreen';
 import ChatScreen from './components/ChatScreen';
@@ -7,9 +7,15 @@ import ChatScreen from './components/ChatScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import {
+  getFirestore,
+  enableNetwork,
+  disableNetwork,
+} from 'firebase/firestore';
+import { useNetInfo } from '@react-native-community/netinfo';
+import { useEffect } from 'react';
 
-// Your web app's Firebase configuration
+// app's Firebase configuration
 const firebaseConfig = {
   apiKey: 'AIzaSyCitnuS0IlCgzCwppHVWZeU2NGWffXRZyY',
   authDomain: 'chat-app-60526.firebaseapp.com',
@@ -28,13 +34,28 @@ const db = getFirestore(app);
 //creates the navigator
 const Stack = createNativeStackNavigator();
 
+//creates connection status variable
+const connect = useNetInfo();
+
+//useEffect disabling the app from attempting to connect to db if user does not have internet//
+useEffect(() => {
+  if (connect.isConnected === false) {
+    Alert.alert('Internet Connection Lost');
+    disableNetwork(db);
+  } else if (connect.isConnected === true) {
+    enableNetwork();
+  }
+}, [connect.isConnected]);
+
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Screen1'>
         <Stack.Screen name='Start' component={StartScreen} />
         <Stack.Screen name='ChatScreen'>
-          {(props) => <ChatScreen db={db} {...props} />}
+          {(props) => (
+            <ChatScreen isConnected={connect.isConnected} db={db} {...props} />
+          )}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
