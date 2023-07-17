@@ -44,7 +44,7 @@ export default function App() {
       Alert.alert('Internet Connection Lost');
       disableNetwork(db);
     } else if (connect.isConnected === true) {
-      enableNetwork();
+      enableNetwork(db);
     }
   }, [connect.isConnected]);
 
