@@ -17,6 +17,10 @@ import {
   DocumentSnapshot,
 } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CustomActions from './CustomActions';
+
+//import statement for our maps which we can send//
+import MapView from 'react-native-maps';
 
 const ChatScreen = ({ route, navigation, db, isConnected }) => {
   //params passed from start screen
@@ -40,6 +44,7 @@ const ChatScreen = ({ route, navigation, db, isConnected }) => {
     );
   };
 
+  //renders in our input bar//
   const renderInputToolBar = (props) => {
     if (isConnected === true) {
       return <InputToolbar {...props} />;
@@ -101,33 +106,33 @@ const ChatScreen = ({ route, navigation, db, isConnected }) => {
     }
   };
 
-  /* useEffect(() => {
-    //defines our query//
-    const q = query(collection(db, 'messages'), orderBy('createdAt', 'desc'));
-    //defines our snapshot function to fetch new messages in real-time//
-    const creatingNewMessages = onSnapshot(q, (DocumentSnapshot) => {
-      let messagesArr = [];
-      DocumentSnapshot.forEach((document) => {
-        //creates a new message object for each new message fetched from the messages db//
-        messagesArr.push({
-          id: document.id,
-          ...document.data(),
-          createdAt: new Date(document.data().createdAt.toMillis()),
-        });
-      });
-      //constantly updates our messages with the new message objects created//
-      setMessages(messagesArr);
-    });
-
-    return () => {
-      //unsubscribes from the connection if nothing is happening//
-      if (creatingNewMessages) creatingNewMessages();
-    };
-  }, []); */
-
   //custom function to adjust what happens when messages are sent//
   const onSend = (messagesArr) => {
     addDoc(collection(db, 'messages'), messagesArr[0]);
+  };
+
+  //renders in a custom map view if the users message contains location data//
+  const renderCustomView = (props) => {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <MapView
+          style={{ width: 150, height: 100, borderRadius: 13, margin: 3 }}
+          region={{
+            latitude: currentMessage.location.latitude,
+            longitude: currentMessage.location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
+  //render custom actions//
+  const renderCustomActions = (props) => {
+    return <CustomActions {...props} />;
   };
 
   return (
@@ -135,13 +140,22 @@ const ChatScreen = ({ route, navigation, db, isConnected }) => {
       <GiftedChat
         messages={messages}
         onSend={(messages) => onSend(messages)}
-        textInputStyle={{ height: 50, marginBottom: 10 }}
+        textInputStyle={{ height: 70, marginBottom: 10, paddingBottom: 10 }}
+        //renders custom bubbles//
         renderBubble={renderBubble}
+        //renders the input bar//
         renderInputToolbar={renderInputToolBar}
+        //passes the user to our chat//
         user={{
           _id: userID,
           name: name,
         }}
+        //renders custom input button +//
+        renderActions={renderCustomActions}
+        //simply adds the users name to the message that they send//
+        renderUsernameOnMessage={true}
+        //calls our custom view function for our map//
+        renderCustomView={renderCustomView}
       />
       {Platform.OS === 'android' ? (
         <KeyboardAvoidingView behavior='height' />
