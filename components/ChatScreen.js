@@ -30,7 +30,7 @@ import CustomActions from './CustomActions';
 import MapView from 'react-native-maps';
 
 //start of component//
-const ChatScreen = ({ route, navigation, db, isConnected }) => {
+const ChatScreen = ({ route, navigation, db, isConnected, storage }) => {
   //params passed from start screen
   const { name, bgColor, userID } = route.params;
   //State
@@ -117,7 +117,7 @@ const ChatScreen = ({ route, navigation, db, isConnected }) => {
   //renders in our input bar//
   const renderInputToolBar = (props) => {
     if (isConnected === true) {
-      return <InputToolbar {...props} />;
+      return <InputToolbar {...props} containerStyle={styles.chatBar} />;
     }
   };
 
@@ -145,7 +145,13 @@ const ChatScreen = ({ route, navigation, db, isConnected }) => {
   //render custom actions//
   //props passed to the returned component are able to be used within our + button component/menu//
   const renderCustomActions = (props) => {
-    return <CustomActions storage={storage} {...props} />;
+    return (
+      <CustomActions
+        {...props}
+        storage={storage}
+        containerStyle={styles.customButton}
+      />
+    );
   };
 
   return (
@@ -169,6 +175,7 @@ const ChatScreen = ({ route, navigation, db, isConnected }) => {
         renderUsernameOnMessage={true}
         //calls our custom view function for our map//
         renderCustomView={renderCustomView}
+        containerStyle={styles.chatContainer}
       />
       {Platform.OS === 'android' ? (
         <KeyboardAvoidingView behavior='height' />
@@ -180,6 +187,19 @@ const ChatScreen = ({ route, navigation, db, isConnected }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  chatBar: {
+    height: 52,
+    paddingBottom: 10,
+    paddingRight: 5,
+    paddingLeft: 6,
+  },
+  customButton: {
+    marginBottom: 10,
+    paddingBottom: 20,
+  },
+  chatContainer: {
+    marginBottom: 60,
   },
 });
 
