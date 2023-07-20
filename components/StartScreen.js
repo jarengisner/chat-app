@@ -55,24 +55,44 @@ const StartScreen = ({ navigation }) => {
           <TouchableOpacity
             style={[styles.colorChooser, styles.color1]}
             onPress={() => colorHandler('#090C08')}
+            accessible={true}
+            accessibilityLabel='Black Button'
+            accessibilityHint='Lets you select the background color of your chat'
+            accessibilityRole='button'
           ></TouchableOpacity>
           <TouchableOpacity
             style={[styles.colorChooser, styles.color2]}
             onPress={() => colorHandler('#474056')}
+            accessible={true}
+            accessibilityLabel='Purple Button'
+            accessibilityHint='Lets you select the background color of your chat'
+            accessibilityRole='button'
           ></TouchableOpacity>
           <TouchableOpacity
             style={[styles.colorChooser, styles.color3]}
             onPress={() => colorHandler('#8A95A5')}
+            accessible={true}
+            accessibilityLabel='Blue Button'
+            accessibilityHint='Lets you select the background color of your chat'
+            accessibilityRole='button'
           ></TouchableOpacity>
           <TouchableOpacity
             style={[styles.colorChooser, styles.color4]}
             onPress={() => colorHandler('#B9C6AE')}
+            accessible={true}
+            accessibilityLabel='Green Button'
+            accessibilityHint='Lets you select the background color of your chat'
+            accessibilityRole='button'
           ></TouchableOpacity>
         </View>
         <TouchableOpacity
           title='Open Chat'
           onPress={signInUser}
           style={styles.chatButton}
+          accessible={true}
+          accessibilityLabel='Open Chat Interface'
+          accessibilityHint='Opens Chat interface'
+          accessibilityRole='button'
         >
           <Text style={styles.startChatting}>Start Chatting</Text>
         </TouchableOpacity>

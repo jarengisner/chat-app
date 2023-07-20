@@ -114,7 +114,14 @@ const CustomActions = ({
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={onActionPress}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={onActionPress}
+      accessible={true}
+      accessibilityLabel='Additional features button'
+      accessibilityHint='Opens menu to select additional options'
+      accessibilityRole='button'
+    >
       <View style={[styles.wrapper, wrapperStyle]}>
         <Text style={[styles.iconText, iconTextStyle]}>+</Text>
       </View>
