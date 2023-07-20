@@ -28,3 +28,14 @@ Google Firestore anonymous authentication was used as authentication.
 - Expo
 
 Expo CLI was used for testing during development, both on a mobile device and a simulated mobile device. To use Expo for your own project, [visit expo here](https://expo.dev/)
+
+## Environment Replication
+
+To replicate the development environment for this app, follow the following steps
+
+- Create a Expo account at the link above
+- Globally install Expo CLI
+- Download the Expo Mobile application on your mobile device or simulator
+- Follow the Expo instructions to set up
+- Initialize the project with npx expo start
+- scan the project QR code with your phone to link the project to your expo app
