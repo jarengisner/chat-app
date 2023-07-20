@@ -71,11 +71,7 @@ const StartScreen = ({ navigation }) => {
         </View>
         <TouchableOpacity
           title='Open Chat'
-          onPress={
-            /* () =>
-             navigation.navigate('ChatScreen', { name: name, bgColor: bgColor })  */
-            signInUser
-          }
+          onPress={signInUser}
           style={styles.chatButton}
         >
           <Text style={styles.startChatting}>Start Chatting</Text>
