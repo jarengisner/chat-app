@@ -14,6 +14,8 @@ import {
 } from 'firebase/firestore';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { useEffect } from 'react';
+//imports our storage function from firebase//
+import { getStorage } from 'firebase/storage';
 
 export default function App() {
   // app's Firebase configuration
@@ -31,6 +33,9 @@ export default function App() {
 
   //initializes our db//
   const db = getFirestore(app);
+
+  //initializes our storage from our app/fireBase config variable//
+  const storage = getStorage(app);
 
   //creates the navigator
   const Stack = createNativeStackNavigator();
@@ -54,7 +59,12 @@ export default function App() {
         <Stack.Screen name='Start' component={StartScreen} />
         <Stack.Screen name='ChatScreen'>
           {(props) => (
-            <ChatScreen isConnected={connect.isConnected} db={db} {...props} />
+            <ChatScreen
+              isConnected={connect.isConnected}
+              db={db}
+              storage={storage}
+              {...props}
+            />
           )}
         </Stack.Screen>
       </Stack.Navigator>

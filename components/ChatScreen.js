@@ -1,3 +1,4 @@
+//react native imports//
 import {
   StyleSheet,
   View,
@@ -7,6 +8,8 @@ import {
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
+
+//firebase imports//
 import {
   collection,
   addDoc,
@@ -16,12 +19,17 @@ import {
   orderBy,
   DocumentSnapshot,
 } from 'firebase/firestore';
+
+//imports our AsyncStorage package//
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+//component imports//
 import CustomActions from './CustomActions';
 
 //import statement for our maps which we can send//
 import MapView from 'react-native-maps';
 
+//start of component//
 const ChatScreen = ({ route, navigation, db, isConnected }) => {
   //params passed from start screen
   const { name, bgColor, userID } = route.params;
@@ -42,13 +50,6 @@ const ChatScreen = ({ route, navigation, db, isConnected }) => {
         }}
       ></Bubble>
     );
-  };
-
-  //renders in our input bar//
-  const renderInputToolBar = (props) => {
-    if (isConnected === true) {
-      return <InputToolbar {...props} />;
-    }
   };
 
   useEffect(() => {
@@ -86,6 +87,7 @@ const ChatScreen = ({ route, navigation, db, isConnected }) => {
     };
   }, [isConnected]);
 
+  //All caching functions below//
   //loadCachedMessages function//
   //This function will fetch our cached messages that we cache with the below function//
   const loadCachedMessages = async () => {
@@ -111,9 +113,19 @@ const ChatScreen = ({ route, navigation, db, isConnected }) => {
     addDoc(collection(db, 'messages'), messagesArr[0]);
   };
 
+  //All render functions below//
+  //renders in our input bar//
+  const renderInputToolBar = (props) => {
+    if (isConnected === true) {
+      return <InputToolbar {...props} />;
+    }
+  };
+
   //renders in a custom map view if the users message contains location data//
   const renderCustomView = (props) => {
+    //destructures the current message//
     const { currentMessage } = props;
+    //if message contains a location then...//
     if (currentMessage.location) {
       return (
         <MapView
@@ -131,8 +143,9 @@ const ChatScreen = ({ route, navigation, db, isConnected }) => {
   };
 
   //render custom actions//
+  //props passed to the returned component are able to be used within our + button component/menu//
   const renderCustomActions = (props) => {
-    return <CustomActions {...props} />;
+    return <CustomActions storage={storage} {...props} />;
   };
 
   return (
